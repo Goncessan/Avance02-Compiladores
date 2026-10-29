@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validador de Lotes y Registros Sanitarios</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <b>Validador de Lotes y Registros Sanitarios</b><span class="badge">USIL 2026</span>
+</header>
+
+<main>
+  <!-- 1 -->
+  <section class="card">
+    <h2><i>1</i>Descripción del compilador</h2>
+    <div class="dos">
+      <div class="nota azul"><h4>Proceso de entrada</h4>
+        El personal de almacén sube un archivo de texto o .csv. Cada línea es un registro:
+        <code>REG_SANITARIO ; LOTE ; EXP:AAAA-MM-DD [; TIPO ; ESTADO]</code></div>
+      <div class="nota verde"><h4>Resultado generado</h4>
+        Cada línea se clasifica como CONFORME, OBSERVADO o RECHAZADO, indicando la fase y la causa exacta.</div>
+    </div>
+    <div class="flujo"><span>Archivo</span>→<span>Léxico</span>→<span>Sintáctico</span>→<span>Semántico</span>→<span>Resultado</span></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="card">
+    <h2><i>2</i>Ingreso de datos</h2>
+    <label class="drop" id="drop">
+      <input type="file" id="archivo" accept=".txt,.csv" hidden>
+      <b>Haz clic o arrastra tu archivo aquí</b>
+      <small>Formatos: .txt · .csv</small>
+    </label>
+    <textarea id="texto" spellcheck="false" rows="10"></textarea>
+    <button id="btnCompilar" class="primario">Compilar</button>
+  </section>
+
+  <!-- 3 -->
+  <section class="card">
+    <h2><i>3</i>Tokens y lexemas</h2>
+    <table id="tTokens"><thead><tr><th>Token</th><th>Lexemas del archivo</th><th>Expresión regular</th></tr></thead><tbody></tbody></table>
+  </section>
+
+  <!-- 4 -->
+  <section class="card">
+    <h2><i>4</i>Autómatas por token</h2>
+    <div id="chips" class="chips"></div>
+    <p class="er">ER: <code id="er"></code></p>
+    <div class="dos">
+      <div><h4>AFND</h4><div class="grafo" id="gAfnd"></div></div>
+      <div><h4>AFD</h4><div class="grafo" id="gAfd"></div></div>
+    </div>
+    <h4>Tabla de transiciones</h4>
+    <div class="scroll"><table id="tTrans"></table></div>
+    <h4>Quíntupla M = (Q, Σ, δ, q0, F)</h4>
+    <pre id="quin"></pre>
+    <h4>Simulador de cadena</h4>
+    <div class="sim">
+      <input id="cadena" placeholder="Ej: LOT2026-X09" spellcheck="false">
+      <button id="btnSim" class="primario">Simular</button>
+      <button id="btnReset">Reset</button>
+    </div>
+    <p id="simOut" class="simout"></p>
+  </section>
+
+  <!-- 5 -->
+  <section class="card">
+    <h2><i>5</i>Análisis sintáctico y semántico</h2>
+    <div class="stats">
+      <div><b id="sTotal">--</b>Líneas</div>
+      <div class="c"><b id="sConf">--</b>Conformes</div>
+      <div class="o"><b id="sObs">--</b>Observados</div>
+      <div class="r"><b id="sRec">--</b>Rechazados</div>
+    </div>
+    <div class="scroll"><table id="tRes"><thead><tr><th>Línea</th><th>Registro</th><th>Estado</th><th>Fase</th><th>Detalle</th></tr></thead>
+      <tbody><tr><td colspan="5" class="vacio">Compila un archivo para ver los resultados.</td></tr></tbody></table></div>
+    <div class="dos">
+      <div><h4>Árbol sintáctico (clic en una línea)</h4><pre id="ast" class="oscuro">—</pre></div>
+      <div><h4>Tabla de símbolos</h4>
+        <div class="scroll"><table id="tSim"><thead><tr><th>Registro</th><th>Lote</th><th>Vence</th><th>Tipo</th><th>Estado</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </section>
+</main>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
